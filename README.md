@@ -1,11 +1,11 @@
+# MAX-SAT Metaheuristic solver
+a MAX-SAT(maximum satisfiability problem) Solver using metaheuristics  .
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ![screenshot](satui2.png)
 
 
-# Meta
-
- a MAX-SAT(maximum satisfiability problem) Solver using metaheuristics  .
 
 
 
