@@ -89,7 +89,7 @@ export default function LineChart(props) {
   },);
   return (
     <>
-      <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+      <div className="w-full md:w-6/12 mb-12 md:mb-0 px-4">
         <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-gray-900">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
@@ -105,7 +105,7 @@ export default function LineChart(props) {
           </div>
           <div className="p-4 flex-auto">
             {/* Chart */}
-            <div className="relative" style={{ height: "300px" }}>
+            <div className="relative h-40 md:h-48 lg:h-56 xl:h-72" >
               <canvas id="line-chart"></canvas>
             </div>
           </div>

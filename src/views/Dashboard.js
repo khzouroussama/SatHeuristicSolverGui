@@ -11,9 +11,9 @@ const Path = window.require('path')
 const exec = window.require('child_process').exec;
 
 
-const path2jar = Path.join( '/home/oussama/WebstormProjects/EleReactProject/src/extraResources/SatHeuristicSolver.jar');
-
-console.log(path2jar)
+// const path2jar = Path.join( '/home/oussama/WebstormProjects/EleReactProject/extraResources/SatHeuristicSolver.jar');
+const path2jar = Path.join(window.require('electron').remote.process.resourcesPath, 'extraResources', 'SatHeuristicSolver.jar');
+// console.log(path2jar)
 
 function execute(command, callback) {
     exec(command, (error, stdout, stderr) => {
@@ -79,28 +79,36 @@ export default function Dashboard() {
         execute(
             'java -jar '+ path2jar +
             ' -parse '+ path,
-            (output) => {setCnfInfo([output.split(';')[0] , output.split(';')[1]  ]) ; console.log(output)}
+            (output) => {setCnfInfo([output.split(';')[0] , output.split(';')[1]  ]) ;}
         );
     }
 
     const runExperment = () => {
         //TODO SHOW ALERT
-        if (runParams.path_to_cnf === 'no cnf file loaded') {
+        if (runParams.path_to_cnf === 'no cnf file loaded' ) {
             alert('No Benchmark was laoded !! ')
-            return
+            return ;
         }
         initView() ;
         setRunButton(false) ;
         let runtimeStart = window.performance.now() ;
         execute(
-            'java -jar '+'/home/oussama/WebstormProjects/EleReactProject/src/extraResources/SatHeuristicSolver.jar' +
+            'java -jar '+ path2jar +
             ' -solve '+ runParams.path_to_cnf + ' ' +runParams.attempts+ ' ' +runParams.runtime+ ' '+
             runParams.population + ' ' + runParams.interia + ' ' + runParams.c1 + ' ' + runParams.c2 ,
             (output) => {
                 let runtimeEnd = window.performance.now() ;
                 //SHOW NOTIFICATION
+                let jsonn = JSON.parse('{}') ;
+                try {
+                    jsonn =  JSON.parse(output) ;
+                }catch (e) {
+                    alert('Erreur ->'+ ((cnf_info[0] === 0) ? ' JAVA EREUR ! ' : 'No Benchmark was laoded !! '));
+                    setRunButton(true) ;
+                    return ;
+                }
 
-                let jsonn =  JSON.parse(output) ;
+
                 setRunButton(true) ;
 
                 let label_from_Json = [] ;
@@ -165,8 +173,8 @@ export default function Dashboard() {
                 <div className="relative bg-blue-600 md:pt-32 pb-32 pt-12">
 
                 </div>
-                <div className="px-4 md:px-10 mx-auto w-full -m-40">
-                    <div className="flex flex-wrap">
+                <div className="px-4 md:px-10 mx-auto w-full -m-40 overflow-auto">
+                    <div className="flex flex-wrap overflow-auto">
                         <BarChart Data={satRateData} />
                         <LineChart Data={satEvolData} />
                         {/*============== INFOS =======================*/}

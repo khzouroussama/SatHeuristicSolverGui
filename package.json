@@ -1,5 +1,5 @@
 {
-  "name": "elec-react-create",
+  "name": "MetaHeuristicsProject",
   "version": "0.1.0",
   "author": {
     "name": "Khezour Mohamed Oussama" ,
@@ -23,7 +23,7 @@
     "tailwindcss": "^1.4.6"
   },
   "homepage": "./",
-  "main": "src/electron-starter.js",
+  "main": "public/electron.js",
   "scripts": {
     "build:tailwind": "postcss src/tailwind.css -o src/tailwind.generated.css",
     "watch:tailwind": "postcss -w src/tailwind.css -o src/tailwind.generated.css",
@@ -35,7 +35,7 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-start": "node src/electron-wait-react",
-    "package": "electron-builder build --win -c.extraMetadata.main=build/static/js/main.1e34fcc8.chunk.js --publish never"
+    "package": "electron-builder build -wl "
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -53,36 +53,26 @@
     ]
   },
   "build": {
-    "appId": "MetaHeuristics",
-    "dmg": {
-      "contents": [
-        {
-          "x": 110,
-          "y": 150
-        },
-        {
-          "x": 240,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
+    "appId": "MetaHeuristicsProject",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories":{
+      "buildResources": "assets"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        "AppImage"
       ]
     },
     "win": {
       "target": ["portable"]
     },
     "portable": {
-      "artifactName": "meta.exe"
+      "artifactName": "metaProject.exe"
     } ,
-    "build": {
-      "extraResources": ["./extraResources/**"]
-    }
+    "extraResources": ["./extraResources/**"]
   },
   "devDependencies": {
     "electron": "^9.0.0",
