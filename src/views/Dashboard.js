@@ -11,7 +11,7 @@ const Path = window.require('path')
 const exec = window.require('child_process').exec;
 
 
-const path2jar = Path.join(__dirname + 'extraResources/SatHeuristicSolver.jar');
+const path2jar = Path.join( '/home/oussama/WebstormProjects/EleReactProject/src/extraResources/SatHeuristicSolver.jar');
 
 console.log(path2jar)
 

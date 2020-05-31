@@ -43,9 +43,17 @@ export default function ResultInfos(props) {
 
     const getHistoricRate = (new_val , old_val , extrString) => {
         if (new_val > old_val )
-            return <Positvemarker value={(new_val - old_val).toFixed(1) + ' ' + extrString} />
+            return <Positvemarker value={'+' + (new_val - old_val).toFixed(1) + ' ' + extrString} />
         else if (new_val < old_val )
             return <NegativeMarker value={(new_val - old_val).toFixed(1) + ' ' + extrString} />
+        else return <StableMarker value={ '0 '+extrString} />
+    }
+
+    const getHistoricRunTime = (new_val , old_val , extrString) => {
+        if (new_val > old_val )
+            return <NegativeMarker value={'+'+(new_val - old_val).toFixed(1) + ' ' + extrString} />
+        else if (new_val < old_val )
+            return <Positvemarker value={(new_val - old_val).toFixed(1) + ' ' + extrString} />
         else return <StableMarker value={ '0 '+extrString} />
     }
 
@@ -73,7 +81,7 @@ export default function ResultInfos(props) {
                 <div id="jh-stats-neutral"
                      className="flex flex-col shadow-lg justify-center px-4 py-4 mt-4 bg-white border border-gray-300 rounded sm:mt-0">
                     <div>
-                        {getHistoricRate(props.Data.runtime , props.history.runtime, 's' )}
+                        {getHistoricRunTime(props.Data.runtime , props.history.runtime, 's' )}
                         <p className="text-3xl font-semibold text-center text-gray-800">{props.Data.runtime} s</p>
                         <p className="text-sm uppercase text-center text-gray-500">Runtime</p>
                     </div>
