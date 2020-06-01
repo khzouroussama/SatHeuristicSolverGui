@@ -7,14 +7,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Technologies
 
-- **Electron** 
-- **ReactJs** 
-- **TailwindCss**  
-
+- Electron 
+- ReactJs 
+- TailwindCss  
+- Java 
 ## Download Executable 
 
-####[Linux](https://drive.google.com/file/d/1WddfjXMAY2saKJ0q9E1twL1YlhjJrP1H/view?usp=sharing)
-####[Windows](https://drive.google.com/file/d/1Ekx3AJP79v61r_0erzmZkOj1EwP2OiOd/view?usp=sharing)
+[Linux](https://drive.google.com/file/d/1WddfjXMAY2saKJ0q9E1twL1YlhjJrP1H/view?usp=sharing)
+
+[Windows](https://drive.google.com/file/d/1Ekx3AJP79v61r_0erzmZkOj1EwP2OiOd/view?usp=sharing)
+
+* Java must be installed
 
 ## Available Scripts
 
