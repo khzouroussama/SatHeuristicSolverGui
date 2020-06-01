@@ -5,15 +5,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ![screenshot](satui2.png)
 
-
-
-
-
 ## Technologies
 
 - **Electron** 
 - **ReactJs** 
-- **TailwindCss** 
+- **TailwindCss**  
+
+## Download Executable 
+
+####[Linux](https://drive.google.com/file/d/1WddfjXMAY2saKJ0q9E1twL1YlhjJrP1H/view?usp=sharing)
+####[Windows](https://drive.google.com/file/d/1Ekx3AJP79v61r_0erzmZkOj1EwP2OiOd/view?usp=sharing)
 
 ## Available Scripts
 
