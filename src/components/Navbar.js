@@ -13,7 +13,7 @@ export default function Navbar(props) {
             .then(
                 (file)=> {
                     if (file !== undefined) {
-                        setCnfPath(file.filePaths[0]) ;
+                        //setCnfPath(file.filePaths[0]) ;
                         props.onCnfUpload(file.filePaths[0]) ;
                     }
                 }
@@ -39,10 +39,10 @@ export default function Navbar(props) {
           <div className="md:flex hidden flex-row flex-wrap items-center lg:ml-auto ">
             <div className="relative flex w-full flex-wrap items-stretch">
               <div className="items-center justify-center bg-grey-lighter">
-                  { cnfPath ?
+                  { props.cnf ?
                       <span className="bg-blue-200 text-blue-700 font-bold items-center rounded-full pt-1 px-2 text-sm mr-3 font-mono">
                           <i className="fas fa-check-circle text-xs  mr-2"></i>
-                            {cnfPath.replace(/^.*[\\\/]/, '')}
+                            {props.cnf.replace(/^.*[\\\/]/, '')}
                       </span>
                       : <span> </span>
                   }

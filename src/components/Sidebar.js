@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import HeuristicParameters from "../components/HeuristicParams";
+import  { HeuristicParametersGA, HeuristicParametersPSO , HeuristicParametersBSO } from "../components/HeuristicParams";
 
 export default function Sidebar(props) {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
@@ -26,7 +26,7 @@ export default function Sidebar(props) {
           </button>
           {/* Brand */}
           <Link
-            className="md:block text-left md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-sm uppercase font-bold p-4 px-0"
+            className="md:block text-center text-left md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-sm uppercase font-bold p-2 px-0"
             to="/"
           >
             {oussTitle}
@@ -126,7 +126,11 @@ export default function Sidebar(props) {
               Parameter tuning
             </h6>
             {/* Navigation */}
-            <HeuristicParameters handleChange={props.onRun} defaultRunParams={props.defaultRunParams}/>
+            {
+            props.algo === 1 ?<HeuristicParametersGA handleChange={props.onRun} defaultRunParams={props.defaultRunParams}/> :
+            props.algo === 2 ?<HeuristicParametersPSO handleChange={props.onRun} defaultRunParams={props.defaultRunParams} /> :
+             <HeuristicParametersBSO handleChange={props.onRun} defaultRunParams={props.defaultRunParams} /> 
+            }
           </div>
         </div>
       </nav>

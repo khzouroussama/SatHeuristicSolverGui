@@ -1,4 +1,38 @@
 @tailwind base;
+
+  
+  /** Thin */
+  @font-face {
+    font-family: "San Francisco";
+    font-weight: 200;
+    src: url("./assets/fonts/sanfranciscodisplay-thin-webfont.woff2");
+  }
+  
+  /** Medium */
+  @font-face {
+    font-family: "San Francisco";
+    font-weight: normal;
+    src: url("./assets/fonts/sanfranciscodisplay-medium-webfont.woff2");
+  }
+  
+  /** Semi Bold */
+  @font-face {
+    font-family: "San Francisco";
+    font-weight: 500;
+    src: url("./assets/fonts/sanfranciscodisplay-semibold-webfont.woff2");
+  }
+  
+  /** Bold */ 
+  @font-face {
+    font-family: "San Francisco";
+    font-weight: bold;
+    src: url("./assets/fonts/sanfranciscodisplay-bold-webfont.woff2");
+  }
+
+    * {
+        font-family: 'San Francisco';
+    }
+
 @tailwind components;
 @tailwind utilities;
 

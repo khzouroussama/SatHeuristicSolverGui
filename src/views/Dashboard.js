@@ -11,13 +11,17 @@ const Path = window.require('path')
 const exec = window.require('child_process').exec;
 
 
-// const path2jar = Path.join( '/home/oussama/WebstormProjects/EleReactProject/extraResources/SatHeuristicSolver.jar');
+//const path2jar = Path.join( '/home/oussama/WebstormProjects/EleReactProject/extraResources/SatHeuristicSolver.jar');
 const path2jar = Path.join(window.require('electron').remote.process.resourcesPath, 'extraResources', 'SatHeuristicSolver.jar');
 // console.log(path2jar)
 
-function execute(command, callback) {
+function execute(command, callback , errCallback) {
     exec(command, (error, stdout, stderr) => {
-        callback(stdout);
+        if (error) {
+            errCallback(error)
+            return ;
+        }
+        else callback(stdout);
     });
 };
 
@@ -35,7 +39,7 @@ export default function Dashboard() {
     }) ;
     const [resultInfoHisory ,setResultInfosHistory] = useState({...resultInfos}) ;
 
-    const [algo , setAlgo] = useState(2) ;
+    const [algo , setAlgo] = useState(3) ;
 
     const [cnf_info , setCnfInfo] = useState([0,0]) ;
 
@@ -43,21 +47,60 @@ export default function Dashboard() {
 
     const [runParams , setRunParams] = useState({
         path_to_cnf : 'no cnf file loaded' ,
-        attempts : 5 ,
-        runtime : 1000 ,
-        population : 90 ,
-        interia : 0.9 ,
-        c1 : 1.7 ,
-        c2 : 1.7
+        PSO_params : {
+            attempts : 5 ,
+            runtime : 1000 ,
+            population : 90 ,
+            interia : 0.9 ,
+            c1 : 1.7 ,
+            c2 : 1.7
+        } , 
+        BSO_params : {
+            attempts : 5 ,
+            runtime : 1000 ,
+            max_local_search : 15 ,
+            number_of_bees : 15 ,
+            flip : 11 ,
+            max_chances : 10 
+        } ,
+        GA_params :{
+            attempts : 5 ,
+            runtime : 1000 ,
+            population : 20 ,
+            crossoverRate : 100 ,
+            mutationRate : 20
+        }
+
     })
 
-    const algoMapper = (algoNbr) => {
-        switch (algoNbr) {
-            case 1 :return 'genetic algorithm';
-            case 2 :return 'particle swarm optimization';
-            case 3 :return 'Bee swarm optimization';
+    const _runGA  = `java -jar ${path2jar} -solveGA ${runParams.path_to_cnf} ${runParams.GA_params.attempts} ${runParams.GA_params.runtime} ${runParams.GA_params.population} ${runParams.GA_params.crossoverRate} ${runParams.GA_params.mutationRate}` 
+    const _runPSO = `java -jar ${path2jar} -solvePSO ${runParams.path_to_cnf} ${runParams.PSO_params.attempts} ${runParams.PSO_params.runtime} ${runParams.PSO_params.population} ${runParams.PSO_params.interia} ${runParams.PSO_params.c1} ${runParams.PSO_params.c2}` 
+    const _runBSO = `java -jar ${path2jar} -solveBSO ${runParams.path_to_cnf} ${runParams.BSO_params.attempts} ${runParams.BSO_params.runtime} ${runParams.BSO_params.max_local_search} ${runParams.BSO_params.number_of_bees} ${runParams.BSO_params.flip} ${runParams.BSO_params.max_chances}` 
+
+    const GA_info = {
+        name : 'genetic algorithm' , 
+        param : 'GA_params' ,
+        run : _runGA,
+    } ;
+    const PSO_info = {
+        name : 'particle swarm optimization' , 
+        param : 'PSO_params' ,
+        run : _runPSO,
+    } ; 
+    const BSO_info = {
+        name : 'Bee swarm optimization' , 
+        param : 'BSO_params' ,
+        run : _runBSO,
+    };
+
+    const algoMapper = (algorithme) => {
+        switch (algorithme) {
+            case 1 :return GA_info;
+            case 2 :return PSO_info;
+            case 3 :return BSO_info;
         }
     }
+
 
     const initView = () => {
         setSatEvolData([[],[]]) ;
@@ -79,7 +122,11 @@ export default function Dashboard() {
         execute(
             'java -jar '+ path2jar +
             ' -parse '+ path,
-            (output) => {setCnfInfo([output.split(';')[0] , output.split(';')[1]  ]) ;}
+            (output) => {
+                setCnfInfo([output.split(';')[0] , output.split(';')[1]  ]) ;
+                setRunParams( {...runParams ,path_to_cnf: path}) ;
+            } ,
+            (err) => alert(err)
         );
     }
 
@@ -93,9 +140,7 @@ export default function Dashboard() {
         setRunButton(false) ;
         let runtimeStart = window.performance.now() ;
         execute(
-            'java -jar '+ path2jar +
-            ' -solve '+ runParams.path_to_cnf + ' ' +runParams.attempts+ ' ' +runParams.runtime+ ' '+
-            runParams.population + ' ' + runParams.interia + ' ' + runParams.c1 + ' ' + runParams.c2 ,
+            algoMapper(algo).run ,
             (output) => {
                 let runtimeEnd = window.performance.now() ;
                 //SHOW NOTIFICATION
@@ -116,7 +161,7 @@ export default function Dashboard() {
                 let evolLabledata = [] ;
                 let evolData = [] ;
                 let satRate = 0 ;
-                for (let i = 0; i < jsonn.length -1 ; i++) {
+                for (let i = 0; i < jsonn.length ; i++) {
                     label_from_Json[i] = 'Attempt '+ (i+1) ;
                     data_from_Json[i] = jsonn[i].fitness ;
                     evolData[i] = {
@@ -130,7 +175,7 @@ export default function Dashboard() {
                 for (let i = 0; i < jsonn[0].evol.length; i++)
                     evolLabledata[i] = (i+1) ;
 
-                satRate = (satRate /runParams.attempts) ;
+                satRate = (satRate /runParams[algoMapper(algo).param].attempts) ;
 
                 // save history
                 setResultInfosHistory ( {...resultInfos} ) ;
@@ -145,36 +190,35 @@ export default function Dashboard() {
                 setSatEvolData( [evolLabledata , evolData] ) ;
                 setSatRateData( [label_from_Json , data_from_Json ]) ;
             }
+            ,(err) => {setRunButton(true) ; alert(err)}
         )
     }
 
     const handleCnfFileUpload = (path) => {
-        setRunParams( {...runParams ,path_to_cnf: path}) ;
         fetchCnfInfo(path) ;
         initView() ;
     } ;
     const handleChooseAlgorithme = (algoNbr) => setAlgo(algoNbr);
 
     const handleRunChange = (e) => {
-        console.log(runParams)
         let name = e.target.name;
         let value = e.target.value;
         setRunParams({
             ...runParams ,
-            [name] : value
+            [algoMapper(algo).param] : { ...runParams[algoMapper(algo).param] , [name] : value } ,
         }) ;
     }
     return (
         <>
             <Sidebar algo ={algo} onAlgoChange={handleChooseAlgorithme} onRun={handleRunChange} defaultRunParams={runParams}/>
             <div className="relative md:ml-64 bg-gray-200 h-screen">
-                <Navbar algorithme = {algoMapper(algo)} onCnfUpload={handleCnfFileUpload}/>
+                <Navbar algorithme = {algoMapper(algo).name} onCnfUpload={handleCnfFileUpload} cnf={runParams.path_to_cnf}/>
                 {/* Header */}
                 <div className="relative bg-blue-600 md:pt-32 pb-32 pt-12">
 
                 </div>
-                <div className="px-4 md:px-10 mx-auto w-full -m-40 overflow-auto">
-                    <div className="flex flex-wrap overflow-auto">
+                <div className="px-4 md:px-10 mx-auto w-full -m-40 ">
+                    <div className="flex flex-wrap ">
                         <BarChart Data={satRateData} />
                         <LineChart Data={satEvolData} />
                         {/*============== INFOS =======================*/}
