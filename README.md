@@ -3,7 +3,12 @@ a MAX-SAT(maximum satisfiability problem) Solver using metaheuristics  .
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-![screenshot](satui2.png)
+### Genetic algorithm
+![screenshot](screenshots/satui3.png)
+### Particle Swarm Optimization
+![screenshot](screenshots/satui2.png)
+### Bee Swarm Optimisation
+![screenshot](screenshots/satui1.png)
 
 ## Technologies
 
